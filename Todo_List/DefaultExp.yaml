@@ -1,0 +1,20 @@
+# Baseline minimal pour vérifier l'installation
+EXP_NAME: DefaultExp
+MODE: supervised
+DEVICE: "cuda"         # "cuda" si GPU
+SEED: 42
+
+DATA_ROOT: "Dataset"
+TRAIN_RATIO: 0.8
+BATCH_SIZE: 128
+NUM_WORKERS: 0
+
+ARCH: "basic"
+EPOCHS: 20
+LR: 0.001
+WEIGHT_DECAY: 0.0
+LABEL_SMOOTH: 0.0
+DICE_LAMBDA: 0.0
+
+AUG:
+  USE_AUG: false

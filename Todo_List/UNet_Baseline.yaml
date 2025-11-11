@@ -1,0 +1,20 @@
+EXP_NAME: UNet_Baseline
+MODE: supervised
+DEVICE: "cuda"          # "cpu" si pas de GPU
+SEED: 1337
+
+DATA_ROOT: "Dataset"
+TRAIN_RATIO: 0.8
+BATCH_SIZE: 128
+NUM_WORKERS: 0
+
+ARCH: "unet"
+UNET_FEATS: [64, 128, 256, 512]
+EPOCHS: 40
+LR: 0.0003
+WEIGHT_DECAY: 0.0001
+LABEL_SMOOTH: 0.03
+DICE_LAMBDA: 0.5
+
+AUG:
+  USE_AUG: true

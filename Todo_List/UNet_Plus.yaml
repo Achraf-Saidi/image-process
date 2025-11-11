@@ -1,0 +1,33 @@
+EXP_NAME: UNet_Plus
+MODE: supervised
+DEVICE: "cuda"
+SEED: 1337
+
+DATA_ROOT: "Dataset"
+TRAIN_RATIO: 0.8
+BATCH_SIZE: 128
+NUM_WORKERS: 0
+
+# Modèle
+ARCH: "unet_plus"
+UNET_FEATS: [64, 128, 256, 512]
+DROP: 0.1
+ADD_EXG: true            # 4ᵉ canal ExG
+
+# Entraînement
+EPOCHS: 70
+LR: 0.0003
+WEIGHT_DECAY: 0.0001
+LABEL_SMOOTH: 0.05
+DICE_LAMBDA: 0.5
+FTL_ALPHA: 0.3
+FTL_BETA: 0.7
+FTL_GAMMA: 1.33
+FTL_LAMBDA: 0.4
+GRAD_CLIP: 1.0
+
+# Inference
+TTA_FLIP: true
+
+AUG:
+  USE_AUG: true
