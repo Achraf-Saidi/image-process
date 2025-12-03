@@ -1,0 +1,10 @@
+{
+  "cluster_to_class": [
+    3,
+    2,
+    0,
+    4,
+    1
+  ],
+  "val_miou_after_mapping": 0.19469732413358973
+}

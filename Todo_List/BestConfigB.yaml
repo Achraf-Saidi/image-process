@@ -1,0 +1,32 @@
+# Todo_List/BestConfigB.yaml
+EXP_NAME: "BestConfigB"
+RESULTS_DIR: "Results/BestConfigB"
+
+DEVICE: cuda
+
+DATA:
+  NUM_CLASSES: 5
+
+DATASET:
+  RESIZE_SHAPE: "64x64"
+
+SSL:
+  ARCH: "ae_unet_light"
+  BASE_CH: 48
+  DROPOUT: 0.1
+
+  LR: 0.001
+  WEIGHT_DECAY: 1e-5
+  EPOCHS: 80
+  BATCH_SIZE: 64
+  PATIENCE: 10
+
+  # loss = MSE + lambda * L1
+  LAMBDA_L1: 0.5
+
+  USE_AMP: true
+
+  # clustering
+  KMEANS_MAX_PIXELS: 200000
+  SEED: 42
+  NUM_WORKERS: 4

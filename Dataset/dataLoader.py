@@ -81,6 +81,8 @@ def make_loaders(cfg):
     nw = cfg.get("NUM_WORKERS", 0)
     ds_root = cfg.get("DATA_ROOT", "Dataset")
     use_exg = cfg.get("ADD_EXG", False)
+    and if the cons
+    
 
     all_imgs,_ = collect_paths(os.path.join(ds_root,"images"), os.path.join(ds_root,"annotations"))
     train_idx, val_idx, test_idx, n_rows, n_cols = split_sets(all_imgs, seed=seed, train_ratio=tr_ratio)
@@ -90,7 +92,9 @@ def make_loaders(cfg):
     dva = LLNDataset(ds_root,"val",  val_idx, {"USE_AUG": False}, add_exg=use_exg)
     dte = LLNDataset(ds_root,"test", test_idx, {"USE_AUG": False}, add_exg=use_exg)
 
-    Ltr = DataLoader(dtr, batch_size=bs, shuffle=True,  num_workers=nw, pin_memory=True)
+    Ltr = DataLoader(dtr, batch_size=bs, shuffle=True,  num_workers=nw, pin_memory=True, )
     Lva = DataLoader(dva, batch_size=bs, shuffle=False, num_workers=nw, pin_memory=True)
     Lte = DataLoader(dte, batch_size=bs, shuffle=False, num_workers=nw, pin_memory=True)
     return Ltr, Lva, Lte, (n_rows, n_cols)
+    
+

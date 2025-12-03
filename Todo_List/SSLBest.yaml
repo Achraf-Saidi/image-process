@@ -1,0 +1,41 @@
+EXP_NAME: "SSLBest"
+SHOW_DATASET: true
+
+MODE: "ssl"
+DEVICE: cuda
+
+DATA:
+  NUM_CLASSES: 5
+
+DATASET:
+  RESIZE_SHAPE: "64x64"
+
+MODEL:
+  ARCH: "unet_resse"
+  IN_CHANNELS: 3
+  BASE_CH: 48
+  DROPOUT: 0.10
+
+TRAIN:
+  LR: 0.001
+  EPOCHS: 80
+  BATCH_SIZE: 64
+  WEIGHT_DECAY: 0.0001
+  PATIENCE: 10
+  NUM_WORKERS: 4
+
+SSL:
+  PROXY: "masked_recon"
+  MASK_RATIO: 0.60
+  MASK_PATCH: 8
+  NOISE_STD: 0.03
+
+  # reconstruction loss = L1 + 0.2*MSE
+  L1_W: 1.0
+  MSE_W: 0.2
+
+  # clustering
+  FEATURE_LEVEL: "enc2"     # 16x16 (meilleur compromis spatial vs sémantique)
+  PROJ_DIM: 64
+  CLUSTERS_K: 10
+  CLUSTER_MAX_SAMPLES: 250000

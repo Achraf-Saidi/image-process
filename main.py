@@ -1,38 +1,50 @@
-import argparse, os, yaml, torch, random, numpy as np
-from termcolor import cprint
-from Networks.model import SupervisedExperiment, SSLExperiment
+# main.py
+from Networks.model import *
+from Dataset.makeGraph import *
 
-def set_seed(seed: int):
-    random.seed(seed); np.random.seed(seed); torch.manual_seed(seed); torch.cuda.manual_seed_all(seed)
-    torch.backends.cudnn.deterministic = True; torch.backends.cudnn.benchmark = False
+import argparse
+import yaml
+import os
+from os.path import dirname, abspath
 
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-exp", required=True, help="YAML name (without .yaml) in Todo_List/")
+rootDirectory    = dirname(abspath(__file__))
+datasetDirectory = os.path.join(rootDirectory, "Dataset")
+imgDirectory     = os.path.join(datasetDirectory, "images")
+maskDirectory    = os.path.join(datasetDirectory, "annotations")
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-exp', type=str, default='DefaultExp')
+
+def main(args):
+    # --- 0) read yaml config (absolute path)
+    yaml_path = os.path.join(rootDirectory, "Todo_List", f"{args.exp}.yaml")
+    if not os.path.exists(yaml_path):
+        raise FileNotFoundError(f"YAML not found: {yaml_path}")
+
+    with open(yaml_path, "r", encoding="utf-8") as f:
+        param = yaml.safe_load(f)
+
+    resultsPath = os.path.join(rootDirectory, "Results", args.exp)
+
+    # --- 1) network
+    myNetwork = Network_Class(param, imgDirectory, maskDirectory, resultsPath)
+
+    # --- 2) dataset viz optional (controlled by YAML)
+    if bool(param.get("SHOW_DATASET", True)):
+        try:
+            showDataset(myNetwork.dataSetTrain, param)
+        except Exception as e:
+            print(f"[WARN] showDataset skipped: {e}")
+
+    # --- 3) train
+    print("Start to train the network")
+    myNetwork.train()
+    print("The network is trained")
+
+    # --- 4) eval
+    myNetwork.loadWeights()
+    myNetwork.evaluate()
+
+if __name__ == '__main__':
     args = parser.parse_args()
-
-    cfg_path = os.path.join("Todo_List", f"{args.exp}.yaml")
-    assert os.path.isfile(cfg_path), f"Config not found: {cfg_path}"
-    with open(cfg_path, "r") as f:
-        cfg = yaml.safe_load(f)
-
-    os.makedirs("Results", exist_ok=True)
-    exp_name = cfg.get("EXP_NAME", args.exp)
-    out_dir  = os.path.join("Results", exp_name)
-    os.makedirs(out_dir, exist_ok=True)
-
-    set_seed(cfg.get("SEED", 42))
-    device = torch.device(cfg.get("DEVICE", "cpu"))
-
-    mode = cfg.get("MODE", "supervised")
-    cprint(f"[EXP] {exp_name} | MODE={mode} | DEVICE={device}", "cyan")
-
-    if mode == "supervised":
-        SupervisedExperiment(cfg, out_dir, device).run()
-    elif mode == "ssl":
-        SSLExperiment(cfg, out_dir, device).run()
-    else:
-        raise ValueError("MODE must be 'supervised' or 'ssl'")
-
-if __name__ == "__main__":
-    main()
+    main(args)
