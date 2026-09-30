@@ -81,9 +81,6 @@ def make_loaders(cfg):
     nw = cfg.get("NUM_WORKERS", 0)
     ds_root = cfg.get("DATA_ROOT", "Dataset")
     use_exg = cfg.get("ADD_EXG", False)
-    and if the cons
-    
-
     all_imgs,_ = collect_paths(os.path.join(ds_root,"images"), os.path.join(ds_root,"annotations"))
     train_idx, val_idx, test_idx, n_rows, n_cols = split_sets(all_imgs, seed=seed, train_ratio=tr_ratio)
 
